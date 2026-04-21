@@ -124,9 +124,10 @@ def main():
     status_parser = subparsers.add_parser("status", help="Check submission status")
     status_parser.add_argument("--submission-id", type=int, required=True, help="Submission ID")
 
-    # Sub-command for aborting submission
-    abort_parser = subparsers.add_parser("abort", help="Abort submission evaluation")
-    abort_parser.add_argument("--submission-id", type=int, required=True, help="Submission ID")
+    # Submit Git repository
+    submit_git_parser = subparsers.add_parser("submit-git", help="Submit a Git repository")
+    submit_git_parser.add_argument("--problem-id", type=int, required=True, help="Problem ID")
+    submit_git_parser.add_argument("--git-url", type=str, required=True, help="Git repository URL")
 
     args = parser.parse_args()
 
@@ -149,6 +150,8 @@ def main():
 
         result = client.submit_code(args.problem_id, args.language, code_text)
 
+    elif args.command == "submit-git":
+        result = client.submit_git(args.problem_id, args.git_url)
     elif args.command == "status":
         result = client.get_submission_detail(args.submission_id)
     elif args.command == "abort":
