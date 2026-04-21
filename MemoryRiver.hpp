@@ -2,24 +2,20 @@
 #define BPT_MEMORYRIVER_HPP
 
 #include <fstream>
-
-using std::string;
-using std::fstream;
-using std::ifstream;
-using std::ofstream;
+#include <string>
 
 template<class T, int info_len = 2>
 class MemoryRiver {
 private:
-    fstream file;
-    string file_name;
+    std::fstream file;
+    std::string file_name;
     int sizeofT = sizeof(T);
 public:
     MemoryRiver() = default;
 
-    MemoryRiver(const string& file_name) : file_name(file_name) {}
+    MemoryRiver(const std::string& file_name) : file_name(file_name) {}
 
-    void initialise(string FN = "") {
+    void initialise(std::string FN = "") {
         if (FN != "") file_name = FN;
         file.open(file_name, std::ios::out | std::ios::binary);
         int tmp = 0;
@@ -50,7 +46,7 @@ public:
     int write(T &t) {
         file.open(file_name, std::ios::in | std::ios::out | std::ios::binary);
         file.seekp(0, std::ios::end);
-        int index = file.tellp();
+        int index = static_cast<int>(file.tellp());
         file.write(reinterpret_cast<char *>(&t), sizeofT);
         file.close();
         return index;
